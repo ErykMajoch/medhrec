@@ -4,6 +4,7 @@
 dist/
 src/pyedhrec.egg-info
 __pycache__/
+.venv/
 
 # Ignore file used for testing functionality
 testing.py
