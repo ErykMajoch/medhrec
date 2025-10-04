@@ -214,14 +214,23 @@ class EDHRec:
         data = self._get_nextjs_data(res)
         return data
 
-    def get_commander_type_distributions(self, card_name: str, bracket: str = None):
+    def get_commander_type_distributions(
+        self, card_name: str, bracket: str = None
+    ) -> dict:
         commander_data = self.get_commander_data(card_name, bracket=bracket)
         data = {}
         for segment in commander_data["panels"]["piechart"]["content"]:
             data[segment["label"]] = segment["value"]
         return data
 
-    def get_commander_mana_curve(self, card_name: str, bracket: str = None):
+    def get_commander_tags(self, card_name: str, bracket: str = None) -> dict:
+        commander_data = self.get_commander_data(card_name, bracket=bracket)
+        data = {}
+        for tag in commander_data["panels"]["taglinks"]:
+            data[tag["value"]] = tag["count"]
+        return data
+
+    def get_commander_mana_curve(self, card_name: str, bracket: str = None) -> dict:
         commander_data = self.get_commander_data(card_name, bracket=bracket)
         return commander_data["panels"]["mana_curve"]
 
