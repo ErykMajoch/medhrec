@@ -185,8 +185,10 @@ class EDHRec:
         return uri
 
     @commander_cache
-    def get_commander_data(self, card_name: str) -> dict:
-        commander_uri, params = self._build_nextjs_uri("commanders", card_name)
+    def get_commander_data(self, card_name: str, bracket: str = None) -> dict:
+        commander_uri, params = self._build_nextjs_uri(
+            "commanders", card_name, bracket=bracket
+        )
         res = self._get(commander_uri, query_params=params)
         data = self._get_nextjs_data(res)
         return data
@@ -210,6 +212,13 @@ class EDHRec:
         )
         res = self._get(average_deck_uri, query_params=params)
         data = self._get_nextjs_data(res)
+        return data
+
+    def get_commander_type_distributions(self, card_name: str, bracket: str = None):
+        commander_data = self.get_commander_data(card_name, bracket=bracket)
+        data = {}
+        for segment in commander_data["panels"]["piechart"]["content"]:
+            data[segment["label"]] = segment["value"]
         return data
 
     def get_commander_cards(self, card_name: str) -> dict:
