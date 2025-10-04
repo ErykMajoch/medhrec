@@ -221,6 +221,10 @@ class EDHRec:
             data[segment["label"]] = segment["value"]
         return data
 
+    def get_commander_mana_curve(self, card_name: str, bracket: str = None):
+        commander_data = self.get_commander_data(card_name, bracket=bracket)
+        return commander_data["panels"]["mana_curve"]
+
     def get_commander_cards(self, card_name: str) -> dict:
         card_list = self._get_cardlist_from_container(card_name)
         return card_list
