@@ -1,28 +1,25 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Callable
 
 
 def generate_wrapped_func(function: Callable, cache: dict) -> Callable:
-    def wrapper(*args, func: Callable = function, wrapped_cache: dict = cache):
-        now = datetime.utcnow()
+    def wrapper(*args, func: Callable = function, wrapped_cache=None):
+        if wrapped_cache is None:
+            wrapped_cache = cache
+        now = datetime.now(timezone.utc)
         if args in wrapped_cache:
             if now >= wrapped_cache[args].get("expiry"):
                 result = func(*args)
                 expiry = now + timedelta(seconds=86400)
-                wrapped_cache[args] = {
-                    "result": result,
-                    "expiry": expiry
-                }
+                wrapped_cache[args] = {"result": result, "expiry": expiry}
 
             return wrapped_cache[args].get("result")
         else:
             result = func(*args)
             expiry = now + timedelta(seconds=86400)
-            wrapped_cache[args] = {
-                "result": result,
-                "expiry": expiry
-            }
+            wrapped_cache[args] = {"result": result, "expiry": expiry}
             return result
+
     return wrapper
 
 

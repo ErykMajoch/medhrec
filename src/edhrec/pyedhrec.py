@@ -2,7 +2,13 @@ import json
 import re
 import requests
 
-from .caching import commander_cache, card_detail_cache, combo_cache, average_deck_cache, deck_cache
+from .caching import (
+    commander_cache,
+    card_detail_cache,
+    combo_cache,
+    average_deck_cache,
+    deck_cache,
+)
 from .utils import get_random_ua
 
 
@@ -14,7 +20,7 @@ class EDHRec:
             self.session.cookies = self.get_cookie_jar(cookies)
         self.session.headers = {
             "Accept": "application/json",
-            "User-Agent": get_random_ua()
+            "User-Agent": get_random_ua(),
         }
         self.base_url = "https://edhrec.com"
         self._json_base_url = "https://json.edhrec.com/cards"
@@ -29,9 +35,7 @@ class EDHRec:
         if cookie_str.startswith("userState="):
             cookie_str = cookie_str.split("userState=")[1]
 
-        d = {
-            "userState": cookie_str
-        }
+        d = {"userState": cookie_str}
         cookie_jar = requests.cookies.cookiejar_from_dict(d)
         return cookie_jar
 
@@ -47,7 +51,9 @@ class EDHRec:
         card_name = card_name.replace(",", "")
         return card_name
 
-    def _get(self, uri: str, query_params: dict =None, return_type: str = "json") -> dict:
+    def _get(
+        self, uri: str, query_params: dict = None, return_type: str = "json"
+    ) -> dict:
         res = self.session.get(uri, params=query_params)
         res.raise_for_status()
         if return_type == "json":
@@ -59,7 +65,9 @@ class EDHRec:
     def get_build_id(self) -> str or None:
         home_page = self._get(self.base_url, return_type="raw")
         home_page_content = home_page.decode("utf-8")
-        script_block_regex = r"<script id=\"__NEXT_DATA__\" type=\"application/json\">(.*)</script>"
+        script_block_regex = (
+            r"<script id=\"__NEXT_DATA__\" type=\"application/json\">(.*)</script>"
+        )
         if script_match := re.findall(script_block_regex, home_page_content):
             props_str = script_match[0]
         else:
@@ -79,12 +87,17 @@ class EDHRec:
         # We have a build ID set
         return True
 
-    def _build_nextjs_uri(self, endpoint: str, card_name: str, slug: str = None, theme: str = None, budget: str = None):
+    def _build_nextjs_uri(
+        self,
+        endpoint: str,
+        card_name: str,
+        slug: str = None,
+        theme: str = None,
+        budget: str = None,
+    ):
         self.check_build_id()
         formatted_card_name = self.format_card_name(card_name)
-        query_params = {
-            "commanderName": formatted_card_name
-        }
+        query_params = {"commanderName": formatted_card_name}
         uri = f"{self.base_url}/_next/data/{self.current_build_id}/{endpoint}/{formatted_card_name}"
 
         if theme:
@@ -134,10 +147,7 @@ class EDHRec:
 
     def get_card_list(self, card_list: list) -> dict:
         uri = f"{self._api_base_url}/cards"
-        req_body = {
-            "format": "dict",
-            "names": card_list
-        }
+        req_body = {"format": "dict", "names": card_list}
         res = self.session.post(uri, json=req_body)
         res.raise_for_status()
         res_json = res.json()
@@ -179,18 +189,19 @@ class EDHRec:
 
     @average_deck_cache
     def get_commanders_average_deck(self, card_name: str, budget: str = None) -> dict:
-        average_deck_uri, params = self._build_nextjs_uri("average-decks", card_name, budget=budget)
+        average_deck_uri, params = self._build_nextjs_uri(
+            "average-decks", card_name, budget=budget
+        )
         res = self._get(average_deck_uri, query_params=params)
         data = self._get_nextjs_data(res)
-        deck_obj = {
-            "commander": card_name,
-            "decklist": data.get("deck")
-        }
+        deck_obj = {"commander": card_name, "decklist": data.get("deck")}
         return deck_obj
 
     @deck_cache
     def get_commander_decks(self, card_name: str, budget: str = None) -> dict:
-        average_deck_uri, params = self._build_nextjs_uri("decks", card_name, budget=budget)
+        average_deck_uri, params = self._build_nextjs_uri(
+            "decks", card_name, budget=budget
+        )
         res = self._get(average_deck_uri, query_params=params)
         data = self._get_nextjs_data(res)
         return data
