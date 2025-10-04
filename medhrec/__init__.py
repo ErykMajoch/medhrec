@@ -1,1 +1,1 @@
-from .pyedhrec import EDHRec
+from .medhrec import EDHRec
