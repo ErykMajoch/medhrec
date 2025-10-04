@@ -131,8 +131,10 @@ class EDHRec:
         if "pageProps" in response:
             return response.get("pageProps", {}).get("data")
 
-    def _get_cardlist_from_container(self, card_name: str, tag: str = None) -> dict:
-        card_data = self.get_commander_data(card_name)
+    def _get_cardlist_from_container(
+        self, card_name: str, tag: str = None, bracket: str = None
+    ) -> dict:
+        card_data = self.get_commander_data(card_name, bracket=bracket)
         container = card_data.get("container", {})
         json_dict = container.get("json_dict", {})
         card_lists = json_dict.get("cardlists")
@@ -234,58 +236,84 @@ class EDHRec:
         commander_data = self.get_commander_data(card_name, bracket=bracket)
         return commander_data["panels"]["mana_curve"]
 
-    def get_commander_cards(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name)
+    def get_commander_cards(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(card_name, bracket=bracket)
         return card_list
 
-    def get_new_cards(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "newcards")
+    def get_new_cards(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "newcards", bracket=bracket
+        )
         return card_list
 
-    def get_high_synergy_cards(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "highsynergycards")
+    def get_high_synergy_cards(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "highsynergycards", bracket=bracket
+        )
         return card_list
 
-    def get_top_cards(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "topcards")
+    def get_top_cards(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "topcards", bracket=bracket
+        )
         return card_list
 
-    def get_top_creatures(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "creatures")
+    def get_top_creatures(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "creatures", bracket=bracket
+        )
         return card_list
 
-    def get_top_instants(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "instants")
+    def get_top_instants(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "instants", bracket=bracket
+        )
         return card_list
 
-    def get_top_sorceries(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "sorceries")
+    def get_top_sorceries(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "sorceries", bracket=bracket
+        )
         return card_list
 
-    def get_top_artifacts(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "utilityartifacts")
+    def get_top_artifacts(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "utilityartifacts", bracket=bracket
+        )
         return card_list
 
-    def get_top_mana_artifacts(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "manaartifacts")
+    def get_top_mana_artifacts(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "manaartifacts", bracket=bracket
+        )
         return card_list
 
-    def get_top_enchantments(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "enchantments")
+    def get_top_enchantments(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "enchantments", bracket=bracket
+        )
         return card_list
 
-    def get_top_battles(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "battles")
+    def get_top_battles(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "battles", bracket=bracket
+        )
         return card_list
 
-    def get_top_planeswalkers(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "planeswalkers")
+    def get_top_planeswalkers(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "planeswalkers", bracket=bracket
+        )
         return card_list
 
-    def get_top_lands(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "lands")
+    def get_top_lands(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "lands", bracket=bracket
+        )
         return card_list
 
-    def get_top_utility_lands(self, card_name: str) -> dict:
-        card_list = self._get_cardlist_from_container(card_name, "utilitylands")
+    def get_top_utility_lands(self, card_name: str, bracket: str = None) -> dict:
+        card_list = self._get_cardlist_from_container(
+            card_name, "utilitylands", bracket=bracket
+        )
         return card_list
