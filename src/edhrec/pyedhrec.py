@@ -165,9 +165,11 @@ class EDHRec:
         return uri
 
     @card_detail_cache
-    def get_card_details(self, card_name: str) -> dict:
+    def get_card_details(self, card_name: str, bracket: str = None) -> dict:
         formatted_card_name = self.format_card_name(card_name)
         uri = f"{self._json_base_url}/{formatted_card_name}"
+        if bracket:
+            uri += f"/{bracket}"
         res = self._get(uri)
         return res
 
