@@ -3,21 +3,20 @@ from typing import Callable
 
 
 def generate_wrapped_func(function: Callable, cache: dict) -> Callable:
-    def wrapper(*args, func: Callable = function, wrapped_cache=None):
-        if wrapped_cache is None:
-            wrapped_cache = cache
+    def wrapper(*args, **kwargs):
         now = datetime.now(timezone.utc)
-        if args in wrapped_cache:
-            if now >= wrapped_cache[args].get("expiry"):
-                result = func(*args)
+        cache_key = (args, tuple(sorted(kwargs.items())))
+        if cache_key in cache:
+            if now >= cache[cache_key].get("expiry"):
+                result = function(*args, **kwargs)
                 expiry = now + timedelta(seconds=86400)
-                wrapped_cache[args] = {"result": result, "expiry": expiry}
+                cache[cache_key] = {"result": result, "expiry": expiry}
 
-            return wrapped_cache[args].get("result")
+            return cache[cache_key].get("result")
         else:
-            result = func(*args)
+            result = function(*args, **kwargs)
             expiry = now + timedelta(seconds=86400)
-            wrapped_cache[args] = {"result": result, "expiry": expiry}
+            cache[cache_key] = {"result": result, "expiry": expiry}
             return result
 
     return wrapper

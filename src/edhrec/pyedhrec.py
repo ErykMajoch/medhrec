@@ -93,12 +93,16 @@ class EDHRec:
         card_name: str,
         slug: str = None,
         theme: str = None,
+        bracket: str = None,
         budget: str = None,
     ):
         self.check_build_id()
         formatted_card_name = self.format_card_name(card_name)
         query_params = {"commanderName": formatted_card_name}
         uri = f"{self.base_url}/_next/data/{self.current_build_id}/{endpoint}/{formatted_card_name}"
+
+        if bracket:
+            uri += f"/{bracket}"
 
         if theme:
             uri += f"/{theme}"
@@ -188,9 +192,11 @@ class EDHRec:
         return data
 
     @average_deck_cache
-    def get_commanders_average_deck(self, card_name: str, budget: str = None) -> dict:
+    def get_commanders_average_deck(
+        self, card_name: str, bracket: str = None, budget: str = None
+    ) -> dict:
         average_deck_uri, params = self._build_nextjs_uri(
-            "average-decks", card_name, budget=budget
+            "average-decks", card_name, budget=budget, bracket=bracket
         )
         res = self._get(average_deck_uri, query_params=params)
         data = self._get_nextjs_data(res)
