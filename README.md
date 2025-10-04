@@ -1,68 +1,88 @@
-# PyEDHRec
+# mEDHRec
 
 ## Overview
-This is a python wrapper around the excellent [EDHREC](https://edhrec.com/) website. Currently, EDHREC does not provide an API 
+This is a fork of [PyEDHRec](https://github.com/stainedhat/pyedhrec) which is a python wrapper around the [EDHREC](https://edhrec.com/) website with some added features I found to be missing form the original. Currently, EDHREC does not provide an API 
 so the intent of this library is to enable people to build automated tooling around the useful information EDHREC provides.
 
 ## Installation
-This package is available on PyPI and can be installed with pip
+This project will not be on PyPI, so here are the steps to use the library locally:
+1. Clone the repository
 ```bash
-pip install pyedhrec
+git clone https://github.com/ErykMajoch/medhrec
 ```
+
+2. Install library requirements
+```bash
+python -m pip install -r requirements.txt
+```
+3. Use the library locally!
+
 
 ## Usage
 Create an instance of the edhrec client
-```python
-from edhrec import EDHRec
 
+```python
+from medhrec import EDHRec
 
 edhrec = EDHRec()
 
 # Reference cards by the exact card name, the library will format as needed
-miirym = "Miirym, Sentinel Wyrm"
+helga = "Helga, Skittish Seer"
+
+# Specify target bracket [None, "exhibition", "core", "upgraded", "optimized", "cedh"]
+bracket = "upgraded"
 
 # Get basic card details
-details = edhrec.get_card_details(miirym)
+details = edhrec.get_card_details(helga, bracket=bracket)
 
 # Get details for a list of cards
 card_list = edhrec.get_card_list(["Pongify", "Farseek"])
 
 # Get an edhrec.com link for a given card
-miirym_link = edhrec.get_card_link(miirym)
+helga_link = edhrec.get_card_link(helga)
 
 # Get combos for a card
-miirym_combos = edhrec.get_card_combos(miirym)
+helga_combos = edhrec.get_card_combos(helga)
 
 # Get commander data 
-miirym_commander_data = edhrec.get_commander_data(miirym)
+helga_commander_data = edhrec.get_commander_data(helga, bracket=bracket)
 
 # Get cards commonly associated with a commander
-miirym_cards = edhrec.get_commander_cards(miirym)
+helga_cards = edhrec.get_commander_cards(helga, bracket=bracket)
 
 # Get the average decklist for a commander
-miirym_avg_deck = edhrec.get_commanders_average_deck(miirym)
+helga_avg_deck = edhrec.get_commanders_average_deck(helga, bracket=bracket)
 
 # Get known deck lists for a commander
-miirym_decks = edhrec.get_commander_decks(miirym)
+helga_decks = edhrec.get_commander_decks(helga)
+
+# Get average commander deck type distribution
+helga_type_distribution = edhrec.get_commander_type_distributions(helga, bracket=bracket)
+
+# Get commander tags
+helga_tags = edhrec.get_commander_tags(helga, bracket=bracket)
+
+# Get average commander deck mana curve
+helga_mc = edhrec.get_commander_mana_curve(helga, bracket=bracket)
 
 # This library provides several methods to get specific types of recommended cards
-new_cards = edhrec.get_new_cards(miirym)
-high_synergy_cards = edhrec.get_high_synergy_cards(miirym)
+new_cards = edhrec.get_new_cards(helga, bracket=bracket)
+high_synergy_cards = edhrec.get_high_synergy_cards(helga, bracket=bracket)
 
 # Get all top cards
-top_cards = edhrec.get_top_cards(miirym)
+top_cards = edhrec.get_top_cards(helga, bracket=bracket)
 
 # Get specific top cards by type
-top_creatures = edhrec.get_top_creatures(miirym)
-top_instants = edhrec.get_top_instants(miirym)
-top_sorceries = edhrec.get_top_sorceries(miirym)
-top_enchantments = edhrec.get_top_enchantments(miirym)
-top_artifacts = edhrec.get_top_artifacts(miirym)
-top_mana_artifacts = edhrec.get_top_mana_artifacts(miirym)
-top_battles = edhrec.get_top_battles(miirym)
-top_planeswalkers = edhrec.get_top_planeswalkers(miirym)
-top_utility_lands = edhrec.get_top_utility_lands(miirym)
-top_lands = edhrec.get_top_lands(miirym)
+top_creatures = edhrec.get_top_creatures(helga, bracket=bracket)
+top_instants = edhrec.get_top_instants(helga, bracket=bracket)
+top_sorceries = edhrec.get_top_sorceries(helga, bracket=bracket)
+top_enchantments = edhrec.get_top_enchantments(helga, bracket=bracket)
+top_artifacts = edhrec.get_top_artifacts(helga, bracket=bracket)
+top_mana_artifacts = edhrec.get_top_mana_artifacts(helga, bracket=bracket)
+top_battles = edhrec.get_top_battles(helga, bracket=bracket)
+top_planeswalkers = edhrec.get_top_planeswalkers(helga, bracket=bracket)
+top_utility_lands = edhrec.get_top_utility_lands(helga, bracket=bracket)
+top_lands = edhrec.get_top_lands(helga, bracket=bracket)
 
 ```
 
