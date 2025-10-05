@@ -29,11 +29,14 @@ edhrec = EDHRec()
 # Reference cards by the exact card name, the library will format as needed
 helga = "Helga, Skittish Seer"
 
-# Specify target bracket [None, "exhibition", "core", "upgraded", "optimized", "cedh"]
+# Specify optional query parameters to filter results
+# All available brackets, tags and budgets can be found in medhrec/utils.py
 bracket = "upgraded"
+tag = "midrange"
+budget = "budget"
 
 # Get basic card details
-details = edhrec.get_card_details(helga, bracket=bracket)
+details = edhrec.get_card_details(helga)
 
 # Get details for a list of cards
 card_list = edhrec.get_card_list(["Pongify", "Farseek"])
@@ -44,47 +47,58 @@ helga_link = edhrec.get_card_link(helga)
 # Get combos for a card
 helga_combos = edhrec.get_card_combos(helga)
 
-# Get commander data 
-helga_commander_data = edhrec.get_commander_data(helga, bracket=bracket)
-
-# Get cards commonly associated with a commander
-helga_cards = edhrec.get_commander_cards(helga, bracket=bracket)
-
-# Get the average decklist for a commander
-helga_avg_deck = edhrec.get_commanders_average_deck(helga, bracket=bracket)
-
-# Get known deck lists for a commander
-helga_decks = edhrec.get_commander_decks(helga)
-
-# Get average commander deck type distribution
-helga_type_distribution = edhrec.get_commander_type_distributions(helga, bracket=bracket)
-
 # Get commander tags
 helga_tags = edhrec.get_commander_tags(helga, bracket=bracket)
 
+# Get commander data (supports bracket, tag, and budget parameters)
+helga_commander_data = edhrec.get_commander_data(helga, bracket=bracket, tag=tag, budget=budget)
+
+# Get cards commonly associated with a commander
+helga_cards = edhrec.get_commander_cards(helga, bracket=bracket, tag=tag, budget=budget)
+
+# Get the average decklist for a commander
+helga_avg_deck = edhrec.get_commanders_average_deck(helga, bracket=bracket, tag=tag, budget=budget)
+
+# Get known deck lists for a commander
+helga_decks = edhrec.get_commander_decks(helga, bracket=bracket, tag=tag, budget=budget)
+
+# Get average commander deck type distribution
+helga_type_distribution = edhrec.get_commander_type_distributions(helga, bracket=bracket, tag=tag, budget=budget)
+
 # Get average commander deck mana curve
-helga_mc = edhrec.get_commander_mana_curve(helga, bracket=bracket)
+helga_mc = edhrec.get_commander_mana_curve(helga, bracket=bracket, tag=tag, budget=budget)
 
 # This library provides several methods to get specific types of recommended cards
-new_cards = edhrec.get_new_cards(helga, bracket=bracket)
-high_synergy_cards = edhrec.get_high_synergy_cards(helga, bracket=bracket)
+# All of these methods support bracket, tag, and budget parameters
+new_cards = edhrec.get_new_cards(helga, bracket=bracket, tag=tag, budget=budget)
+high_synergy_cards = edhrec.get_high_synergy_cards(helga, bracket=bracket, tag=tag, budget=budget)
 
 # Get all top cards
-top_cards = edhrec.get_top_cards(helga, bracket=bracket)
+top_cards = edhrec.get_top_cards(helga, bracket=bracket, tag=tag, budget=budget)
 
 # Get specific top cards by type
-top_creatures = edhrec.get_top_creatures(helga, bracket=bracket)
-top_instants = edhrec.get_top_instants(helga, bracket=bracket)
-top_sorceries = edhrec.get_top_sorceries(helga, bracket=bracket)
-top_enchantments = edhrec.get_top_enchantments(helga, bracket=bracket)
-top_artifacts = edhrec.get_top_artifacts(helga, bracket=bracket)
-top_mana_artifacts = edhrec.get_top_mana_artifacts(helga, bracket=bracket)
-top_battles = edhrec.get_top_battles(helga, bracket=bracket)
-top_planeswalkers = edhrec.get_top_planeswalkers(helga, bracket=bracket)
-top_utility_lands = edhrec.get_top_utility_lands(helga, bracket=bracket)
-top_lands = edhrec.get_top_lands(helga, bracket=bracket)
+top_creatures = edhrec.get_top_creatures(helga, bracket=bracket, tag=tag, budget=budget)
+top_instants = edhrec.get_top_instants(helga, bracket=bracket, tag=tag, budget=budget)
+top_sorceries = edhrec.get_top_sorceries(helga, bracket=bracket, tag=tag, budget=budget)
+top_enchantments = edhrec.get_top_enchantments(helga, bracket=bracket, tag=tag, budget=budget)
+top_artifacts = edhrec.get_top_artifacts(helga, bracket=bracket, tag=tag, budget=budget)
+top_mana_artifacts = edhrec.get_top_mana_artifacts(helga, bracket=bracket, tag=tag, budget=budget)
+top_battles = edhrec.get_top_battles(helga, bracket=bracket, tag=tag, budget=budget)
+top_planeswalkers = edhrec.get_top_planeswalkers(helga, bracket=bracket, tag=tag, budget=budget)
+top_utility_lands = edhrec.get_top_utility_lands(helga, bracket=bracket, tag=tag, budget=budget)
+top_lands = edhrec.get_top_lands(helga, bracket=bracket, tag=tag, budget=budget)
 
 ```
+
+## Query Parameters
+Most commander-related methods support the following optional parameters to filter results:
+- **bracket**: Filter by power level (exhibition, core, upgraded, optimized, cedh)
+- **tag**: Filter by deck theme/archetype (e.g., midrange, aggro, combo)
+- **budget**: Filter by budget constraint ("budget" or "expensive")
+
+For a complete list of available tags and other options, see `medhrec/utils.py`.
+
+**Note**: Not all combinations of parameters may have data available on EDHRec. If a configuration doesn't exist, the library will raise an exception with a message about the missing data.
 
 ## Caching
 To avoid excessive requests to edhrec.com this library uses in-memory caching for card retrieval methods. Each time you run 
